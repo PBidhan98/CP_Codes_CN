@@ -1,0 +1,54 @@
+bool findpos(int a[][9],int &r,int &c){
+  for(int i=0;i<9;i++){
+    for(int j=0;j<9;j++){
+        if(a[i][j]==0){
+                r=i;c=j;
+                return true;
+        }
+    }
+  }
+  return false;
+}
+
+bool checkRandC(int a[][9],int r ,int c, int x){
+  for(int i=0;i<9;i++){
+    if(a[i][c]==x||a[r][i]==x)
+    return false;
+  }
+  return true;
+}
+
+bool checkbox(int a[][9],int row ,int col, int num){
+  int rowFactor = row - (row%3);
+	int colFactor = col - (col%3);
+	for(int i=0;i<3;i++){
+		for(int j=0;j<3;j++){
+			if(a[i+rowFactor][j+colFactor] == num){
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+bool possible(int a[][9],int i ,int j, int x){
+  if(checkRandC(a,i,j,x)&&checkbox(a,i,j,x))
+    return true;
+  else return false;
+}
+
+
+bool sudokuSolver(int a[][9]){
+  int i,j;
+  if(!findpos(a,i,j))return true;
+    for(int x=1;x<=9;x++){
+        if(possible(a,i,j,x)){
+            a[i][j]=x;
+            if(sudokuSolver(a)){
+                return true;
+            }
+            a[i][j]=0;
+        }
+    }
+  return false;
+}
