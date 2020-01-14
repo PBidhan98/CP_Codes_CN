@@ -1,0 +1,29 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n,k,l;
+    cin>>n>>k>>l;
+    int* arr=new int[n];
+    int mini=INT_MAX,maxi=0,dec=0,inc=0,ans=INT_MAX;
+    for(int i = 0 ; i < n ; i++ ){
+        cin>>arr[i];
+        mini=min(mini,arr[i]);
+        maxi=max(maxi,arr[i]);
+    }
+   for(int i=mini;i<=maxi;i++){
+       dec=0,inc=0;
+       for(int j=0;j<n;j++){
+         if(arr[j]>=i){
+             dec+=arr[j]-i;
+         }
+         if(arr[j]<i){
+          inc+=i-arr[j];
+            }
+        }
+       if(inc>=dec)
+          ans = min(ans,dec*k+(inc-dec)*l);  
+    }
+    cout<<ans;
+    
+}
