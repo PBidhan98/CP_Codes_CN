@@ -1,0 +1,34 @@
+#include <bits/stdc++.h>
+#define m 1000000007
+using namespace std;
+
+int main()
+{
+    while(1){
+        string s;
+        cin>>s;
+        if(s[0] == '0') break;
+        int n=s.size();
+        long long* a = new long long[n+1];
+        a[0]=1;
+        a[1]=1;
+        for(int i=2;i<=n;i++){
+            if((s[i-1]-'0')!=0){
+                a[i]=a[i-1]%m;
+                if(((s[i-2]-'0')*10 + s[i-1]-'0' <= 26) && (s[i-2]-'0')!=0){
+                    a[i]=a[i]+a[i-2]%m;
+                }
+            }
+            else if(s[i-2]-'0'==1 || s[i-2]-'0'==2){
+                a[i]=a[i-2]%m;
+            }
+            else {
+                a[n]=0;
+                break;
+            }
+        }
+        cout<<a[n]%m<<endl;
+        delete[] a;
+    }
+    return 0;
+}
