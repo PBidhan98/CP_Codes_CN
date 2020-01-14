@@ -1,0 +1,31 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+bool dfs(vector<int>* edges,int sv,bool* &visited,int t){
+    visited[sv] = true;
+    for(int i=0;i<edges[sv].size();i++){
+        int next = edges[sv][i];
+        if(visited[next]==true) continue;
+        if(next==t) return true;
+        bool ans = dfs(edges,next,visited,t);
+        if(ans) return true;
+    }
+    return false;
+}
+
+int main()
+{
+    int n,t;
+    cin>>n>>t;
+    int* a = new int[n-1];
+    for(int i=0;i<n-1;i++) cin>>a[i];
+    vector<int>* edges = new vector<int>[n];
+    for(int i=0;i<n-1;i++){
+        edges[i].push_back(a[i]+i);
+    }
+    bool* visited = new bool[n];
+    for(int i=0;i<n;i++) visited[i]=false;
+    int output = dfs(edges,0,visited,t-1);
+    if(output) cout<<"YES";
+    else cout<<"NO";
+}
