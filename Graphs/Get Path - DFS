@@ -1,0 +1,60 @@
+// Given an undirected graph G(V, E) and two vertices v1 and v2(as integers), find and print the path from v1 to v2 (if exists). Print nothing if there is no path between v1 and v2.
+// Find the path using DFS and print the first path that you encountered.
+// V is the number of vertices present in graph G and vertices are numbered from 0 to V-1.
+// E is the number of edges present in graph G.
+// Print the path in reverse order. That is, print v2 first, then intermediate vertices and v1 at last.
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int DFS(int** edges,int n,int sv,int end,bool* visited,vector<int> &ans){
+    visited[sv] = true;
+    if(sv==end) {
+        ans.push_back(sv);
+        return 1;
+    }
+    for(int i=0;i<n;i++){
+        if(i==sv) continue;
+        if(edges[sv][i]==1){
+            if(visited[i]) continue;
+            int a = DFS(edges,n,i,end,visited,ans);
+            if(a==1) {
+                ans.push_back(sv);
+                return 1;
+            } 
+        }
+    }
+    return 0;
+}
+
+int main()
+{
+    int V, E;
+    cin >> V >> E;
+    int** edges = new int*[V];
+    for(int i=0;i<V;i++){
+        edges[i] = new int[V];
+        for(int j=0;j<V;j++) edges[i][j] = 0;
+    }
+    for(int i=0;i<E;i++){
+        int f,s;
+        cin>>f>>s;
+        edges[f][s] = 1;
+        edges[s][f] = 1;
+    }
+    int start,end;
+    cin>>start>>end;
+    if(start==end) return 0;
+    if(edges[start][end]==1) {
+        cout<<end<<" "<<start;
+        return 0;
+    }
+    bool* visited = new bool[V];
+    for(int i=0;i<V;i++) visited[i] = false;
+    vector<int> ans;
+    int a = DFS(edges,V,start,end,visited,ans);
+    if(a==1){
+        for(int i=0;i<ans.size();i++) cout<<ans[i]<<" ";
+    }
+    return 0;
+}
