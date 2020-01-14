@@ -1,0 +1,30 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+struct trip{
+    int x;
+    int y;
+    int h;
+};
+
+int main()
+{
+    int n;
+    cin>>n;
+    trip *a = new trip[n];
+    double *dp = new double[n];
+    for(int i=0;i<n;i++)
+        cin>>a[i].x>>a[i].y>>a[i].h;
+    dp[0] = a[0].h;
+    for(int i=1;i<n;i++){
+        double d = sqrt(pow((a[i].x-a[i-1].x),2) + pow((a[i].y-a[i-1].y),2));
+        dp[i] = dp[i-1] + a[i].h - d;
+        for(int j=i-1;j>=0;j--) {
+            double d1 = sqrt(pow((a[i].x-a[j].x),2) + pow((a[i].y-a[j].y),2));
+            double happy  = dp[j] + a[i].h -d1;
+            if(dp[i]<happy) dp[i] = happy;
+        }
+    }
+    cout<<fixed<<setprecision(6)<<dp[n-1];
+    return 0;
+}
