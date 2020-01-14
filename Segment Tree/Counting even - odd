@@ -1,0 +1,90 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+struct node{
+    int odd;
+    int even;
+};
+
+void buildTree(int*arr, node* tree, int start, int end, int treeNode){
+    if(start==end) {
+        if(arr[start]%2!=0) {
+            tree[treeNode].odd=1;
+            tree[treeNode].even=0;
+        }else {
+            tree[treeNode].odd=0;
+            tree[treeNode].even=1;
+        }
+        return;
+    }
+    int mid = (start+end)/2;
+    buildTree(arr,tree,start,mid,2*treeNode);
+    buildTree(arr,tree,mid+1,end,2*treeNode+1);
+    tree[treeNode].odd = tree[2*treeNode].odd + tree[2*treeNode+1].odd;
+    tree[treeNode].even = tree[2*treeNode].even + tree[2*treeNode+1].even;
+}
+
+void update(int*arr, node* tree, int start, int end, int treeNode, int index, int value){
+    if(start==end) {
+        arr[index] = value;
+        if(arr[start]%2!=0) {
+            tree[treeNode].odd=1;
+            tree[treeNode].even=0;
+        }else {
+            tree[treeNode].odd=0;
+            tree[treeNode].even=1;
+        }
+        return;
+    }
+    int mid = (start+end)/2;
+    if(index>mid) update(arr,tree,mid+1,end,2*treeNode+1,index,value);
+    else update(arr,tree,start,mid,2*treeNode,index,value);
+    tree[treeNode].odd = tree[2*treeNode].odd + tree[2*treeNode+1].odd;
+    tree[treeNode].even = tree[2*treeNode].even + tree[2*treeNode+1].even;
+}
+
+node query(node* tree,int start,int end,int treeNode,int left,int right){
+    //completely outside
+    if(end<left || start>right) {
+         node temp;
+         temp.odd=0;
+         temp.even=0;
+         return temp;
+    }
+    //completely inside
+    if(left<=start && end<=right) return tree[treeNode];
+    //partially inside and partially outside
+    int mid = (start+end)/2;
+    node n1 = query(tree,start,mid,2*treeNode,left,right);
+    node n2 = query(tree,mid+1,end,2*treeNode+1,left,right);
+    node ans;
+    ans.odd = n1.odd + n2.odd;
+    ans.even = n1.even + n2.even;
+    return ans;
+}
+
+
+int main() {
+    int n;
+    cin>>n;
+    int* a = new int[n];
+    node* tree = new node[4*n];
+    for(int i=0;i<n;i++) cin>>a[i];
+    buildTree(a,tree,0,n-1,1);
+    int q;
+    cin>>q;
+    while(q--){
+        int d,x,y;
+        cin>>d>>x>>y;
+        if(d==0) {
+            update(a,tree,0,n-1,1,x-1,y);
+        }
+        else if(d==1) {
+            node ans = query(tree,0,n-1,1,x-1,y-1);
+            cout<<ans.even<<endl;
+        }else if(d==2){
+            node ans = query(tree,0,n-1,1,x-1,y-1);
+            cout<<ans.odd<<endl;
+        }
+    }
+}
