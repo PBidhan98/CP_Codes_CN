@@ -1,0 +1,15 @@
+//Given an array of length N and an integer x, you need to find all the indexes where x is present in the input array. Save all the indexes in an array (in increasing order).
+
+void findindex(int a[],int n,int x,int out[],int &k,int currindex){
+    if(n<0) return;
+    if(a[0]==x) {
+        out[k]=currindex;
+        k++;
+    }
+    findindex(a+1,n-1,x,out,k,currindex+1);
+}
+int allIndexes(int a[], int n, int x,int out[]) {
+    int k=0;
+    findindex(a,n,x,out,k,0);
+    return k;
+}
