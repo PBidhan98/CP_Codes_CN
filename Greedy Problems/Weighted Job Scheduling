@@ -1,0 +1,48 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+struct item{
+    int s,e,p;
+};
+
+bool compare(struct item a,struct item b){
+    return a.e < b.e;
+}
+
+int binary_search(item arr[],int index){
+    int l,h;
+    l=0;
+    h=index-1;
+    int ans=-1;
+    while(l<=h){
+        int m = (l+h)/2;
+        if(arr[index].s >= arr[m].e){
+            ans = m;
+            l = m+1;
+        }
+        else h = m-1;
+    }
+    return ans;
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    item* arr = new item[n];
+    int* temp = new int[n];
+    for(int i=0;i<n;i++){
+        cin>>arr[i].s;
+        cin>>arr[i].e;
+        cin>>arr[i].p;
+    }
+    sort(arr,arr+n,compare);
+    int c=0;
+    for(int i=0;i<n;i++) temp[i]=arr[i].p;
+    for(int i=1;i<n;i++){
+        c = binary_search(arr,i);
+        temp[i] = max(temp[i]+temp[c] , temp[i-1]);
+    }
+    cout<<temp[n-1];
+    return 0;
+}
