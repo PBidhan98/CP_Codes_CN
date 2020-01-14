@@ -1,0 +1,9 @@
+#include<bits/stdc++.h>
+int minAbsoluteDiff(int a[], int n) {
+    std::sort(a,a+n);
+    int min=a[1]-a[0];
+    for(int i=1;i<n;i++){
+        if(a[i]-a[i-1] < min) min=a[i]-a[i-1];
+    }
+    return min;
+}
