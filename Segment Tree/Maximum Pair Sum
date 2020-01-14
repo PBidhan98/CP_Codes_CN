@@ -1,0 +1,95 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+struct node{
+    int maximum;
+    int smaximum;
+};
+
+void buildTree(int* arr,node* tree,int start,int end,int treeNode){
+    if(start==end) {
+        tree[treeNode].maximum = arr[start];
+        tree[treeNode].smaximum = INT_MIN;
+        return;
+    }
+    int mid = (start+end)/2;
+    buildTree(arr,tree, start,mid,2*treeNode);
+    buildTree(arr,tree,mid+1,end,2*treeNode+1);
+    int lmax = tree[2*treeNode].maximum;
+    int rmax = tree[2*treeNode+1].maximum;
+    int lsmax = tree[2*treeNode].smaximum;
+    int rsmax = tree[2*treeNode+1].smaximum;
+    tree[treeNode].maximum = max(lmax,rmax);
+    tree[treeNode].smaximum = max(min(lmax,rmax),max(lsmax,rsmax));
+}
+
+void updateTree(int* arr,node* tree,int start,int end,int treeNode,int idx,int value){
+    if(start==end) {
+        arr[idx] = value;
+        tree[treeNode].maximum = value;
+        return;
+    }
+    int mid = (start+end)/2;
+    if(idx> mid){
+        //right jana
+        updateTree(arr,tree,mid+1,end,2*treeNode+1,idx,value);
+    }else{
+        //left jana
+        updateTree(arr,tree,start,mid,2*treeNode,idx,value);
+    }
+    int lmax = tree[2*treeNode].maximum;
+    int rmax = tree[2*treeNode+1].maximum;
+    int lsmax = tree[2*treeNode].smaximum;
+    int rsmax = tree[2*treeNode+1].smaximum;
+    tree[treeNode].maximum = max(lmax,rmax);
+    tree[treeNode].smaximum = max(min(lmax,rmax),max(lsmax,rsmax));
+}
+
+node query(node* tree,int start,int end,int treeNode,int left,int right){
+    //completely outside
+    if(end<left || start>right) {
+         node temp;
+         temp.maximum=INT_MIN;
+         temp.smaximum=INT_MIN;
+         return temp;
+    }
+    //completely inside
+    if(left<=start && end<=right) return tree[treeNode];
+    //partially inside and partially outside
+    int mid = (start+end)/2;
+    node ans1 = query(tree,start,mid,2*treeNode,left,right);
+    node ans2 = query(tree,mid+1,end,2*treeNode+1,left,right);
+    node ans;
+    int lmax = ans1.maximum;
+    int rmax = ans2.maximum;
+    int lsmax = ans1.smaximum;
+    int rsmax = ans2.smaximum;
+    ans.maximum = max(lmax,rmax);
+    ans.smaximum = max(min(lmax,rmax),max(lsmax,rsmax));
+    return ans;
+}
+
+int main(){
+    int n,q;
+    cin>>n;
+    int* arr = new int[n];
+    for(int i=0;i<n;i++) cin>>arr[i];
+    cin>>q;
+    node* tree = new node[4*n];
+    buildTree(arr,tree,0,n-1,1);
+    while(q--){
+        char c;
+        int left,right,index,value;
+        cin>>c;
+        if(c=='Q') {
+            cin>>left>>right;
+            node ans;
+            ans = query(tree,0,n-1,1,left-1,right-1);
+            cout<<ans.maximum+ans.smaximum<<endl;
+        }else{
+            cin>>index>>value;
+            updateTree(arr,tree,0,n-1,1,index-1,value);
+        }
+    }
+    return 0;
+}
