@@ -1,0 +1,41 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int kedan(int* dp, int m) { 
+    int maxi=INT_MIN, sum = 0; 
+    for (int i = 0; i < m; i++) { 
+        sum = sum + dp[i]; 
+        if (sum > maxi) 
+            maxi = sum; 
+        if (sum < 0) 
+            sum = 0; 
+    } 
+    return maxi; 
+} 
+
+int main()
+{
+    int m,n;
+    cin>>m>>n;
+    int** a = new int*[m];
+    int* dp = new int[m];
+    for(int i=0;i<m;i++){
+        a[i] = new int[n];
+        dp[i] = 0;
+        for(int j=0;j<n;j++) 
+            cin>>a[i][j];
+    }
+    int best = INT_MIN, c=0;
+    for(int i=0;i<n;i++){
+        for(int j=i;j<n;j++) {
+            for(int k=0;k<m;k++)
+               dp[k] = dp[k] + a[k][j];
+            //kedane's algo
+            c = kedan(dp,m);
+            if(c>best) best = c;
+        }
+        for(int p=0;p<m;p++) dp[p] = 0;
+    }
+    cout<<best;
+    return 0;
+}
