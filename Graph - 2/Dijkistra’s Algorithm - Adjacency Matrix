@@ -1,0 +1,45 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+
+int main()
+{
+    int V, E;
+    cin>>V>>E;
+    int** edges = new int*[V];
+    for(int i=0;i<V;i++){
+        edges[i] = new int[V];
+        for(int j=0;j<V;j++)
+            edges[i][j] = 0;
+    }
+    for(int i=0;i<E;i++){
+        int f,s,w;
+        cin>>f>>s>>w;
+        edges[f][s] = w;
+        edges[s][f] = w;
+    }
+    bool* visited = new bool[V];
+    for(int i=0;i<V;i++) visited[i] = false;
+    int* distance = new int[V];
+    for(int i=0;i<V;i++) distance[i] = INT_MAX;
+    distance[0] = 0;
+    for(int i=0;i<V-1;i++){
+        int d = INT_MAX;
+        int sv = 0;
+        for(int j=0;j<V;j++){
+            if((d>distance[j])&& visited[j]==false){
+                d = distance[j];
+                sv=j;
+            }
+        }
+        visited[sv] = true;
+        for(int j=0;j<V;j++){
+            if(edges[sv][j]!=0 && visited[j]==false && distance[j]>distance[sv]+edges[sv][j])
+                distance[j]=distance[sv]+edges[sv][j];
+        }
+    }
+    for(int i=0;i<V;i++){
+        cout<<i<<" "<<distance[i]<<endl;
+    }
+  return 0;
+}
