@@ -1,0 +1,45 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int bfs(vector<int>* edges,int sv,int end,int n){
+    bool* visited = new bool[n];
+    for(int i=0;i<n;i++) visited[i] = false;
+    int* level = new int[n];
+    level[0]=0;
+    queue<int> q;
+    q.push(sv);
+    visited[sv] = true;
+    while(!q.empty()){
+        sv = q.front();
+        visited[sv]=true;
+        q.pop();
+        for(int i=0;i<edges[sv].size();i++){
+            int next = edges[sv][i];
+            if(visited[next]==false){
+                level[next] = level[sv]+1;
+                q.push(next);
+                visited[next] = true;
+                if(next==end) return level[next];
+            }   
+        }
+    }
+}
+
+int main()
+{
+	int t;
+    cin>>t;
+    while(t--){
+        int n,m;
+        cin>>n>>m;
+        vector<int>* edges = new vector<int>[n];
+        for(int i=0;i<m;i++){
+            int a,b;
+            cin>>a>>b;
+            edges[a-1].push_back(b-1);
+            edges[b-1].push_back(a-1);
+        }
+        cout<<bfs(edges,0,n-1,n)<<endl;
+    }
+	return 0;
+}
