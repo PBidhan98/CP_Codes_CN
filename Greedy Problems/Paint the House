@@ -1,0 +1,54 @@
+// The most important thing in this problem is to notice that we care the most for the earliest possible time to get the job done here. Knowing that, it is quite easy to come it with a greedy solution, which is the following rule:
+
+// Always hire the fastest available painter and let him paint as long as there is no faster painter available.
+
+// It is obvious that this strategy solves the problem. The only thing to care about is how to implement it.
+
+// You can notice that all times when painters become available are integers not greater than 105. Knowing that we can compute A[t] as the fastest worker who becomes available at time t, and if there are multiple such workers, A[t] is the cheapest one among them.
+
+// Having array A[t] computed, we can iterate over it, hiring a new painter only if he is faster than currently hired one. During that process, we also have care of the amount of already painted house, but this is very easy to do knowing the paint rate of currently hired painter. The process of counting the cost spent for painting the house at the earliest time is ended when the whole house is painted or we examined all workers in array A.
+
+// Thus, If we let T to be the maximum availability time of a painter, then the time complexity of this method is clearly O(N + T).
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+struct worker{
+    int time,cost,speed;
+};
+
+bool compare(worker a,worker b){
+    if(a.time == b.time){
+        if(a.speed == b.speed){
+            return a.cost<b.cost;
+        }
+        return a.speed>b.speed;
+    }
+    return a.time < b.time;
+}
+
+int main()
+{
+    long long n,d;
+    cin>>n>>d;
+    worker* w = new worker[n];
+    for(int i=0;i<n;i++){
+        cin>>w[i].time>>w[i].cost>>w[i].speed;
+    }
+    sort(w,w+n,compare);
+    long long area=0,addArea=w[0].speed * w[0].time ,bestSpeed=w[0].speed,cost=w[0].cost,lastTime=w[0].time;
+    for(int i=1;i<n;i++){
+        addArea = bestSpeed*(w[i].time - lastTime);
+        area+=addArea;
+        if(area>=d) break;
+        if(w[i].speed > bestSpeed){
+            bestSpeed = w[i].speed;
+            cost+=w[i].cost;
+        }
+        lastTime=w[i].time;
+    }
+    cout<<cost;
+    return 0;
+}
