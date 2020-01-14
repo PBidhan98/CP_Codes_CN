@@ -1,0 +1,48 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int f(int o,int c,int n,bool* a,int** dp){
+    if(o>n || c>n) return 0;
+    if(o==n && c==n) return 1;
+    if(dp[o][c]!=-1) return dp[o][c];
+    if(o==c || a[o+c]==true) 
+        dp[o][c] = f(o+1,c,n,a,dp);
+    else if(o==n) {
+        if(a[o+c]==true) dp[o][c]=0;
+        else dp[o][c] = f(o,c+1,n,a,dp);
+    }
+    else {
+        int op1=0,op2=0;
+        op1 = f(o+1,c,n,a,dp);
+        op2 = f(o,c+1,n,a,dp);
+        dp[o][c] = op1+op2;
+    }
+    return dp[o][c];
+}
+
+int main()
+{
+    int d;
+    cin>>d;
+    while(d--){
+        int n,k,flag=0;
+        cin>>n>>k;
+        bool* a = new bool[2*n];
+        for(int i=0;i<2*n;i++)
+            a[i]=false;
+        for(int i=0;i<k;i++){
+            int s;
+            cin>>s;
+            a[s-1] = true;
+        }
+        int**dp=new int*[n+1];
+        for(int i=0;i<=n;i++){
+            dp[i]=new int[n+1];
+            for(int j=0;j<=n;j++){
+                dp[i][j]=-1;
+            }
+        }
+        cout<<f(0,0,n,a,dp)<<endl;
+    }
+    return 0;
+}
