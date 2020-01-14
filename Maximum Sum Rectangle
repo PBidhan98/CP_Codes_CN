@@ -1,0 +1,41 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    int m,n;
+    cin>>m>>n;
+    int** a = new int*[m];
+    int** dp = new int*[m];
+    for(int i=0;i<m;i++){
+        a[i] = new int[n];
+        dp[i] = new int[n];
+        for(int j=0;j<n;j++) {
+            cin>>a[i][j];
+            dp[i][j] = 0;
+        }    
+    }
+    for(int i=0;i<m;i++)
+        for(int j=0;j<n;j++) 
+            for(int k=i;k<m;k++)
+                for(int l=j;l<n;l++)
+                    dp[i][j] = dp[i][j] + a[k][l];
+    
+    int maxArea = -1,area = -1;
+    for(int i=0;i<m;i++){
+        for(int j=0;j<n;j++) {
+            for(int k=i;k<m;k++){
+                for(int l=j;l<n;l++){
+                    if(k==i && j==l) area = dp[i][j];
+                    if(l+1>n-1 && k+1>m-1) area  = dp[i][j];
+                    else if(l+1>n-1 && k+1<=m-1) area = dp[i][j]-dp[k+1][j];
+                    else if(k+1>m-1 && l+1<=n-1) area = dp[i][j]-dp[i][l+1];
+                    else area = dp[i][j]-dp[i][l+1]-dp[k+1][j]+dp[k+1][l+1];
+                    if(maxArea<area) maxArea = area;
+                }
+            }
+        }
+    }
+    cout<<maxArea<<endl;
+    return 0;
+}
