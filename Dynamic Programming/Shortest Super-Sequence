@@ -1,0 +1,35 @@
+//Given two strings S and T, find and return the length of their smallest super-sequence. A shortest super sequence of two strings is defined as the shortest possible string containing both strings as subsequences. Note that if the two strings do not have any common characters, then return the sum of lengths of the two strings.
+
+#include<iostream>
+using namespace std;
+int helper(string s1,string s2, int m, int n, int** dp){
+    if(m==0) return n;
+    if(n==0) return m;
+    if(dp[m][n]>-1) return dp[m][n];
+    int ans;
+    if(s1[0] == s2[0])
+        ans = 1 + helper(s1.substr(1),s2.substr(1),m-1,n-1,dp);
+    else {
+        int op1=0,op2=0;
+        op1 = 1+helper(s1.substr(1),s2,m-1,n,dp);
+        op2 = 1+helper(s1,s2.substr(1),m,n-1,dp);
+        ans = min(op1,op2);
+    }
+    dp[m][n] = ans;
+    return ans;
+}
+int smallestSuperSequence(char s1[], int len1, char s2[], int len2) { 
+    int m = len1;
+    int n = len2;
+    int** dp = new int*[m+1];
+    for(int i=0;i<=m;i++){
+        dp[i] = new int[n+1];
+        for(int j=0;j<=n;j++)
+            dp[i][j] = -1;
+    }
+    int ans = helper(s1,s2,m,n,dp);
+    for(int i=0;i<=m;i++)
+        delete[] dp[i];
+    delete [] dp;
+    return ans;
+}
