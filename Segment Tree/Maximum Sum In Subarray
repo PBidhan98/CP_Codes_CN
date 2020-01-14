@@ -1,0 +1,67 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+struct node{
+    long long int maxSum;
+    long long int sum;
+    long long int suffix;
+    long long int prefix;
+};
+
+void buildTree(int* arr,node* tree,int start,int end,int treeNode){
+    if(start == end) {
+        tree[treeNode].maxSum = arr[start];
+        tree[treeNode].sum = arr[start];
+        tree[treeNode].suffix = arr[start];
+        tree[treeNode].prefix = arr[start];
+        return;
+    }
+    int mid = (start+end)/2;
+    buildTree(arr,tree,start,mid,2*treeNode);
+    buildTree(arr,tree,mid+1,end,2*treeNode+1);
+    tree[treeNode].maxSum = max(max(tree[2*treeNode+1].maxSum,tree[2*treeNode].maxSum),tree[2*treeNode].suffix+tree[2*treeNode+1].prefix);
+    tree[treeNode].sum = tree[2*treeNode].sum+tree[2*treeNode+1].sum;
+    tree[treeNode].suffix = max(tree[2*treeNode+1].suffix,tree[2*treeNode+1].sum+tree[2*treeNode].suffix);
+    tree[treeNode].prefix = max(tree[2*treeNode].prefix,tree[2*treeNode].sum+tree[2*treeNode+1].prefix);
+}
+
+node QTree(int* arr,node* tree,int start,int end,int treeNode,int left,int right){
+    int mid = (start+end)/2;
+    if(start>right || end<left) 
+    {
+        node temp;
+        temp.maxSum = INT_MIN;
+        temp.sum = INT_MIN;
+        temp.suffix = INT_MIN;
+        temp.prefix = INT_MIN;
+        return temp;
+     }
+    if(left<=start && end<=right) return tree[treeNode];
+    node n1 = QTree(arr,tree,start,mid,2*treeNode,left,right);
+    node n2 = QTree(arr,tree,mid+1,end,2*treeNode+1,left,right);
+    node ans;
+    ans.maxSum = max(max(n1.maxSum,n2.maxSum),n1.suffix+n2.prefix);
+    ans.sum = n1.sum+n2.sum;
+    ans.suffix = max(n2.suffix, n2.sum+n1.suffix);
+    ans.prefix = max(n1.prefix, n1.sum+n2.prefix);
+    return ans;
+}
+    
+int main() {
+    int n;
+    cin>>n;
+    int* arr = new int[n];
+    for(int i=0;i<n;i++) cin>>arr[i];
+    node* tree = new node[4*n];
+    buildTree(arr,tree,0,n-1,1);
+    int m;
+    cin>>m;
+    while(m--){
+        int l,r;
+        cin>>l>>r;
+        node a;
+        a = QTree(arr,tree,0,n-1,1,l-1,r-1);
+        cout<<a.maxSum<<endl;
+    }
+    return 0;
+}
