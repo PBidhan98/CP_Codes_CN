@@ -1,0 +1,51 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+string check(int num){
+    string s;
+    switch(num){
+        case 2:
+            s="abc";
+            break;
+        case 3:
+            s="def";
+            break;
+        case 4: 
+            s="ghi";
+            break;
+        case 5:
+            s="jkl";
+            break;
+        case 6: 
+            s="mno";
+            break;
+        case 7:
+            s="pqrs";
+            break;
+        case 8:
+            s="tuv";
+            break;
+        case 9:
+            s="wxyz";
+            break;
+    }
+    return s;
+}
+
+void pkeypad(int num,string output){
+    if(num==0 || num==1){
+        cout<<output<<endl;
+        return;
+    }
+    string s = check(num%10);
+    int n = s.size();
+    for(int i=0;i<n;i++){
+        pkeypad(num/10,s[i]+output);
+    }
+}
+
+void printKeypad(int num){
+    string output="";
+    pkeypad(num,output);
+}
