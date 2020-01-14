@@ -1,0 +1,45 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int grid(int** hm,int m,int n){
+    int** dp = new int*[m];
+    for(int i=0;i<m;i++) dp[i] = new int[n];
+    dp[m-1][n-1] = 1;
+    for(int j = n-2;j>=0;j--){
+        if(dp[m-1][j+1] - hm[m-1][j] >= 1) dp[m-1][j] = dp[m-1][j+1] - hm[m-1][j];
+        else dp[m-1][j] = 1;
+    }
+    for(int i=m-2;i>=0;i--){
+        if(dp[i+1][n-1] - hm[i][n-1] >= 1) dp[i][n-1] = dp[i+1][n-1] - hm[i][n-1];
+        else dp[i][n-1] = 1;
+    }
+    for(int i=m-2;i>=0;i--){
+        for(int j=n-2;j>=0;j--){
+            int mini = min(dp[i+1][j], dp[i][j+1]) - hm[i][j];
+            if(mini<=0) mini=1;
+            dp[i][j] = mini;
+        }
+    }
+    int ans = dp[0][0];
+    for(int i=0;i<m;i++) delete[] dp[i];
+    delete[] dp;
+    return ans;
+}
+
+int main()
+{
+    int t;
+    cin>>t;
+    while(t--){
+        int m,n;
+        cin>>m>>n;
+        int** hm = new int*[m];
+        for(int i=0;i<m;i++) {
+            hm[i] = new int[n];
+            for(int j=0;j<n;j++)
+                cin>>hm[i][j];
+        }
+        cout<<grid(hm,m,n)<<endl;
+    }
+    return 0;
+}
