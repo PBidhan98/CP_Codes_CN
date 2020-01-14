@@ -1,0 +1,14 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+    int t;
+    cin>>t;
+    while(t--){
+        int i,p;
+        cin>>i>>p;
+        if(i+p <= 11) cout<<i+p<<endl;
+        else if(i+p >11) cout<<(i+p)-11-1<<endl;
+    }
+	return 0;
+}
