@@ -1,0 +1,6 @@
+int count(int n){
+    if(n==0) return 0;
+    int f = 1;
+    f = f + count(n/10);
+    return f;
+}
