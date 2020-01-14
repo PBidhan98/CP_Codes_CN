@@ -1,0 +1,72 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+struct Edge{
+    int src;
+    int dest;
+    int weight;
+};
+
+int getParent(int* parent,int v){
+    if(v==parent[v]) return v;
+    return getParent(parent,parent[v]);
+}
+
+bool compare(Edge a,Edge b){
+    return a.weight<b.weight;
+}
+
+int kruskal(Edge* edges,int* parent,int n,int m,int a){
+    sort(edges,edges+m,compare);
+    int count=0;
+    int total=0;
+    int i=0;
+    while(count<(n-1) && count<m && i<m){
+        Edge curr = edges[i];
+        if(curr.weight<a){
+            int srcParent = getParent(parent,curr.src);
+            int destParent = getParent(parent,curr.dest);
+            if(srcParent!=destParent){
+                count++;
+                total = total+curr.weight;
+                parent[destParent] = srcParent; 
+            }
+        }
+        i++;
+    }
+    return total;
+}
+
+int main()
+{
+    int t;
+    int s=1;
+    cin>>t;
+    while(t--){
+        int n,m,a;
+        cin>>n>>m>>a;
+        Edge* edges = new Edge[m];
+        for(int i=0;i<m;i++){
+            int x,y,z;
+            cin>>x>>y>>z;
+            edges[i].src = x-1;
+            edges[i].dest = y-1;
+            edges[i].weight = z;
+        }
+        int* parent = new int[n];
+        for(int i=0;i<n;i++) parent[i] = i;
+        int output = kruskal(edges,parent,n,m,a);
+        int air=0;
+        for(int i=0;i<n;i++){
+            if(i==parent[i]){
+                output = output+a;
+                air++;
+            }
+        }
+        cout<<"Case #"<<s<<": "<<output<<" "<<air<<endl;
+        delete[] edges;
+        delete[] parent;
+        s++;
+    }
+	return 0;
+}
