@@ -1,0 +1,77 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void dfs(vector<int>* edges,int sv,vector<int> &component,bool* visited){
+    visited[sv]=true;
+    component.push_back(sv);
+    for(int i=0;i<edges[sv].size();i++){
+        int next = edges[sv][i];
+        if(!visited[next]){
+            dfs(edges,next,component,visited);
+        }
+    }
+}
+
+vector<vector<int>> getComponents(vector<int>* edges,int n){
+    bool* visited = new bool[n]();
+    vector<vector<int>> output;
+    for(int i=0;i<n;i++){
+        if(!visited[i]){
+            vector<int> component;
+            dfs(edges,i,component,visited);
+            output.push_back(component);
+        }
+    }
+    delete[] visited;
+    return output;
+}
+
+int main()
+{
+    int t;
+    cin>>t;
+    while(t--){
+        int n,m;
+        cin>>n>>m;
+        vector<int>* edges = new vector<int>[n];
+        int* p = new int[n];
+        for(int i=0;i<n;i++) cin>>p[i];
+        int* q = new int[n];
+        for(int i=0;i<n;i++) cin>>q[i];
+        for(int i=0;i<m;i++){
+            int a,b;
+            cin>>a>>b;
+            edges[a-1].push_back(b-1);
+            edges[b-1].push_back(a-1);
+        }
+        vector<vector<int>> ans = getComponents(edges,n);
+        vector<vector<int>> pp;
+        vector<vector<int>> qq;
+        for(int i=0;i<ans.size();i++){
+            vector<int> p1;
+            vector<int> q1;
+            for(int j=0;j<ans[i].size();j++){
+                p1.push_back(p[ans[i][j]]);
+                q1.push_back(q[ans[i][j]]);
+            }
+            pp.push_back(p1);
+            qq.push_back(q1);
+        }
+        int f;
+        for(int i=0;i<pp.size();i++){
+            for(int j=0;j<pp[i].size();j++){
+                f=0;
+                for(int k=0;k<pp[i].size();k++)
+                    if(qq[i][j]==pp[i][k]) f=1;
+                if(f==0) {
+                    cout<<"NO"<<endl;
+                    break;
+                } 
+            }
+            if(f==0) break;
+        }
+        if(f==0) continue;
+        cout<<"YES"<<endl;
+    }
+	return 0;
+}
