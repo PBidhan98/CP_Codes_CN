@@ -1,0 +1,128 @@
+// Its Gary's birthday today and he has ordered his favourite square cake consisting of '0's and '1's . But Gary wants the biggest piece of '1's and no '0's . A piece of cake is defined as a part which consist of only '1's, and all '1's share an edge with each other on the cake. Given the size of cake N and the cake , can you find the size of the biggest piece of '1's for Gary ?
+
+using namespace std;
+
+int code(char cake[NMAX][NMAX],int n,int i,int j,bool** visited){
+    visited[i][j] = true;
+    //north
+    int count=0;
+    if(i-1>=0 && j>=0){
+        if(cake[i-1][j]=='1'){
+            if(visited[i-1][j]==false){
+                count = count + code(cake,n,i-1,j,visited);
+            }
+        }
+    }
+    //east
+    if(i>=0 && j+1<n){
+        if(cake[i][j+1]=='1'){
+            if(visited[i][j+1]==false){
+                count = count + code(cake,n,i,j+1,visited);
+            }
+        }
+    }
+    //south
+    if(i+1<n && j>=0){
+        if(cake[i+1][j]=='1'){
+            if(visited[i+1][j]==false){
+                count = count + code(cake,n,i+1,j,visited);
+            }
+        }
+    }
+    //west
+    if(i>=0 && j-1>=0){
+        if(cake[i][j-1]=='1'){
+            if(visited[i][j-1]==false){
+                count = count + code(cake,n,i,j-1,visited);
+            }
+        }
+    }
+    return count+1;
+}
+
+int solve(int n,char cake[NMAX][NMAX]){
+    bool** visited = new bool*[n];
+    for(int i=0;i<n;i++){
+        visited[i] = new bool[n];
+        for(int j=0;j<n;j++){
+            visited[i][j] = false;
+        }
+    }
+    int maxi=0;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            if(cake[i][j]=='1' && visited[i][j]==false){
+                int x = code(cake,n,i,j,visited);
+                if(x>maxi) maxi=x;
+            }
+        }
+    }
+    return maxi;
+}
+
+                                      //ORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+
+using namespace std;
+
+int code(char cake[NMAX][NMAX],int n,int i,int j,bool** visited,int &k){
+    visited[i][j] = true;
+    //north
+    int a=0,b=0,c=0,d=0;
+    if(i-1>=0 && j>=0){
+        if(cake[i-1][j]=='1'){
+            if(visited[i-1][j]==false){
+                k=k+1;
+                a = code(cake,n,i-1,j,visited,k);
+            }
+        }
+    }
+    //east
+    if(i>=0 && j+1<n){
+        if(cake[i][j+1]=='1'){
+            if(visited[i][j+1]==false){
+                k++;
+                b = code(cake,n,i,j+1,visited,k);
+            }
+        }
+    }
+    //south
+    if(i+1<n && j>=0){
+        if(cake[i+1][j]=='1'){
+            if(visited[i+1][j]==false){
+                k++;
+                c = code(cake,n,i+1,j,visited,k);
+            }
+        }
+    }
+    //west
+    if(i>=0 && j-1>=0){
+        if(cake[i][j-1]=='1'){
+            if(visited[i][j-1]==false){
+                k++;
+                d = code(cake,n,i,j-1,visited,k);
+            }
+        }
+    }
+    return 0;
+}
+
+int solve(int n,char cake[NMAX][NMAX]){
+    int maxi=0;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            if(cake[i][j]=='1'){
+                bool** visited = new bool*[n];
+                for(int i=0;i<n;i++){
+                    visited[i] = new bool[n];
+                    for(int j=0;j<n;j++){
+                        visited[i][j] = false;
+                    }
+                }
+                int k=1;
+                int x = code(cake,n,i,j,visited,k);
+                if(k>maxi) maxi=k;
+            }
+        }
+    }
+    return maxi;
+}
