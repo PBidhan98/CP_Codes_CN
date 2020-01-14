@@ -1,0 +1,57 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void dfs(vector<int>* edges,int sv,vector<int> &component,bool* visited){
+    visited[sv]=true;
+    component.push_back(sv);
+    for(int i=0;i<edges[sv].size();i++){
+        int next = edges[sv][i];
+        if(!visited[next]){
+            dfs(edges,next,component,visited);
+        }
+    }
+}
+
+vector<vector<int>> getComponents(vector<int>* edges,int n){
+    bool* visited = new bool[n]();
+    vector<vector<int>> output;
+    for(int i=0;i<n;i++){
+        if(!visited[i]){
+            vector<int> component;
+            dfs(edges,i,component,visited);
+            output.push_back(component);
+        }
+    }
+    delete[] visited;
+    return output;
+}
+
+int main()
+{
+    int t;
+    cin>>t;
+    while(t--){
+        int n,m;
+        cin>>n>>m;
+        vector<int>* edges = new vector<int>[n];
+        for(int i=0;i<m;i++){
+            int a,b;
+            cin>>a>>b;
+            edges[a-1].push_back(b-1);
+            edges[b-1].push_back(a-1);
+        }
+        long long* a = new long long[n];
+        for(int i=0;i<n;i++) cin>>a[i];
+        vector<vector<int>> ans = getComponents(edges,n);
+        long long maxi = 0;
+        for(int i=0;i<ans.size();i++){
+            long long sum=0;
+            for(int j=0;j<ans[i].size();j++){
+                sum = sum + a[ans[i][j]];
+            }
+            if(sum>maxi) maxi=sum;
+        }
+        cout<<maxi<<endl;
+    }
+	return 0;
+}
