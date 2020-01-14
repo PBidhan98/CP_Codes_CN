@@ -1,0 +1,47 @@
+void print(int **a,int n){
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            cout<<a[i][j]<<" ";
+        }
+    }
+    cout<<endl;
+}
+
+bool check(int **a,int x,int y,int n){
+    for(int i=x-1;i>=0;i--){
+        if(a[i][y]==1) return false;
+    }
+    for(int i=x-1,j=y-1;i>=0 && j>=0;i--,j--){
+        if(a[i][j]==1) return false;
+    }
+    for(int i=x-1,j=y+1;i>=0 && j<n;i--,j++){
+        if(a[i][j]==1) return false;
+    }
+    return true;
+}
+
+void queen(int **a,int n,int i){
+    if(i==n){
+        print(a,n);
+        return;
+    }
+    for(int j=0;j<n;j++){
+        if(check(a,i,j,n)){
+            a[i][j]=1;
+            queen(a,n,i+1);
+            a[i][j]=0;
+        }
+    }
+    return;
+}
+
+void placeNQueens(int n){
+int **a = new int*[n];
+    for(int i=0;i<n;i++){
+        a[i]=new int[n];
+        for(int j=0;j<n;j++){
+            a[i][j]=0;
+        }
+    }
+    queen(a,n,0);
+}
