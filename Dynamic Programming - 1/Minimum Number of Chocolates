@@ -1,0 +1,13 @@
+int getMin(int *a, int n){
+    int* dp =new int[n];
+    dp[0]=1; 
+    for(int i=1;i<n;i++){
+        dp[i] = 1;
+        if(a[i]>a[i-1]) dp[i] = dp[i-1]+1;
+    }
+    for(int i=n-1;i>=0;i--) 
+        if((a[i]<a[i-1])&&(dp[i]>=dp[i-1])) dp[i-1] = dp[i]+1;
+    int sum = 0;
+    for(int i=0;i<n;i++) sum = sum + dp[i];
+    return sum;
+}
