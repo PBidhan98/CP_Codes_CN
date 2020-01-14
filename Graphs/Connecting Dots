@@ -1,0 +1,72 @@
+using namespace std;
+
+int code(char board[][MAXN],char str,int n, int m,int start,int end,int i,int j,bool** visited,int k){
+    visited[i][j] = true;
+    if((i==start+1 && j==end)||(i==start && j==end-1)||(i==start && j==end+1)||(i==start-1 && j==end)){
+        if(k>=4 && board[i][j]==str) return 1;
+    }
+    //north
+    if(i>=0 && j-1>=0){
+        if(board[i][j-1]==str){
+            if(visited[i][j-1]==false){
+                int a = code(board,str,n,m,start,end,i,j-1,visited,k+1);
+                if(a==1) return 1;
+            }
+        }
+    }
+    //east
+    if(i+1<n && j>=0){
+        if(board[i+1][j]==str){
+            if(visited[i+1][j]==false){
+                int b = code(board,str,n,m,start,end,i+1,j,visited,k+1);
+                if(b==1) return 1;
+            }
+        }
+    }
+    //south
+    if(i>=0 && j+1<m){
+        if(board[i][j+1]==str){
+            if(visited[i][j+1]==false){
+                int c = code(board,str,n,m,start,end,i,j+1,visited,k+1);
+                if(c==1) return 1;
+            }
+        }
+    }
+    //west
+    if(i-1>=0 && j>=0){
+        if(board[i-1][j]==str){
+            if(visited[i-1][j]==false){
+                int d = code(board,str,n,m,start,end,i-1,j,visited,k+1);
+                if(d==1) return 1;
+            }
+        }
+    }
+    visited[i][j]=false;
+    return 0;
+}
+
+int solve(char board[][MAXN],int N, int M){
+    string s = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    int size = s.length();
+    bool** visited = new bool*[N];
+    for(int i=0;i<N;i++){
+        visited[i] = new bool[M];
+        for(int j=0;j<M;j++){
+            visited[i][j] = false;
+        }
+    }
+    while(size>0){
+        for(int i=0;i<N;i++){
+            for(int j=0;j<M;j++){
+                if(board[i][j]==s[0]){
+                    int k=1;
+                    int x = code(board,s[0],N,M,i,j,i,j,visited,k);
+                    if(x==1) return 1;
+                }
+            }
+        }
+        s=s.substr(1);
+        size=size-1;
+    }
+    return 0;
+}
