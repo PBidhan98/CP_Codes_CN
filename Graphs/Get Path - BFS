@@ -1,0 +1,69 @@
+// Given an undirected graph G(V, E) and two vertices v1 and v2(as integers), find and print the path from v1 to v2 (if exists). Print nothing if there is no path between v1 and v2.
+// Find the path using BFS and print the shortest path available.
+// V is the number of vertices present in graph G and vertices are numbered from 0 to V-1.
+// E is the number of edges present in graph G.
+// Print the path in reverse order. That is, print v2 first, then intermediate vertices and v1 at last.
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int BFS(int**edges,int n,int sv,int end,bool* visited,map<int,int> &ans){
+    queue<int> Q;
+    Q.push(sv);
+    visited[sv] = true;
+    while(!Q.empty()){
+        sv = Q.front();
+        Q.pop();
+        for(int i=0;i<n;i++){
+            if(i==sv) continue;
+            if(edges[sv][i]==1){
+                if(visited[i]) continue;
+                Q.push(i);
+                ans.insert({i,sv});
+                visited[i] = true;
+                if(i==end) return 1;
+            }
+        }
+    }
+    return 0;
+}
+
+int main()
+{
+    int V, E;
+    cin >> V >> E;
+    int** edges = new int*[V];
+    for(int i=0;i<V;i++){
+        edges[i] = new int[V];
+        for(int j=0;j<V;j++) edges[i][j] = 0;
+    }
+    for(int i=0;i<E;i++){
+        int f,s;
+        cin>>f>>s;
+        edges[f][s] = 1;
+        edges[s][f] = 1;
+    }
+    int start,end;
+    cin>>start>>end;
+    if(start==end) {
+        cout<<end<<" ";
+        return 0;
+    }
+    if(edges[start][end]==1) {
+        cout<<end<<" "<<start<<" ";
+        return 0;
+    }
+    bool* visited = new bool[V];
+    for(int i=0;i<V;i++) visited[i] = false;
+    map<int,int> ans;
+    int a = BFS(edges,V,start,end,visited,ans);
+    if(a==1){
+        int m=end;
+        while(m != start){
+            cout << m << " ";
+            m = ans[m];
+        }
+        cout << start << endl;
+    }
+    return 0;
+}
