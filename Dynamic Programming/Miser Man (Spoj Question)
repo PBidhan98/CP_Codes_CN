@@ -1,0 +1,36 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int k(int** a,int n,int m,int i,int j,int** dp){
+    if(i==n) return 0;
+    if(dp[i][j]!=-1) return dp[i][j];
+    int op1=INT_MAX,op2=INT_MAX,op3=INT_MAX;
+    if(j>0 && i<n) op1 = a[i][j]+ k(a,n,m,i+1,j-1,dp);
+    if(j<m-1 && i<n) op3 = a[i][j]+k(a,n,m,i+1,j+1,dp);
+    if(i<n) op2 = a[i][j]+ k(a,n,m,i+1,j,dp);
+    dp[i][j] = min(op1,min(op2,op3));
+    return dp[i][j];
+}
+
+int main()
+{
+    int n,m;
+    cin>>n>>m;
+    int** a = new int*[n];
+    for(int i=0;i<n;i++){
+        a[i] = new int[m];
+        for(int j=0;j<m;j++) cin>>a[i][j];
+    }
+    int** dp = new int*[n];
+    for(int i=0;i<n;i++){
+         dp[i] = new int[m];
+        for(int j=0;j<m;j++) dp[i][j]=-1;   
+    }
+    int sum = INT_MAX;
+    for(int j=0;j<m;j++){
+        int no = k(a,n,m,0,j,dp);
+        if(sum>no) sum=no;
+    }
+    cout<<sum<<endl;
+    return 0;
+}
