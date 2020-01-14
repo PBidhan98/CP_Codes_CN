@@ -1,0 +1,122 @@
+#include<bits/stdc++.h>
+#define mod 1000000007
+using namespace std;
+
+long long fact[1000000],sum;
+
+void pre_calc(){
+    fact[0] = 1;
+    for(long long i=1;i<1000000;i++)
+        fact[i] = (fact[i-1]%mod*i)%mod;
+}
+
+int dfs(int** edges,int i,int j,bool** visited,int n,int m){
+    visited[i][j]=true;
+    int count=0;
+    if(i-2>=0 && j-1>=0){
+        if(edges[i-2][j-1]==1){
+            if(visited[i-2][j-1]==false){
+                count = count + dfs(edges,i-2,j-1,visited,n,m);
+            }
+        }
+    }
+    if(i-2>=0 && j+1<m){
+        if(edges[i-2][j+1]==1){
+            if(visited[i-2][j+1]==false){
+                count = count + dfs(edges,i-2,j+1,visited,n,m);
+            }
+        }
+    }
+    if(i-1>=0 && j-2>=0){
+        if(edges[i-1][j-2]==1){
+            if(visited[i-1][j-2]==false){
+                count = count + dfs(edges,i-1,j-2,visited,n,m);
+            }
+        }
+    }
+    if(i-1>=0 && j+2<m){
+        if(edges[i-1][j+2]==1){
+            if(visited[i-1][j+2]==false){
+                count = count + dfs(edges,i-1,j+2,visited,n,m);
+            }
+        }
+    }
+    if(i+1<n && j-2>=0){
+        if(edges[i+1][j-2]==1){
+            if(visited[i+1][j-2]==false){
+                count = count + dfs(edges,i+1,j-2,visited,n,m);
+            }
+        }
+    }
+    if(i+1<n && j+2<m){
+        if(edges[i+1][j+2]==1){
+            if(visited[i+1][j+2]==false){
+                count = count + dfs(edges,i+1,j+2,visited,n,m);
+            }
+        }
+    }
+    if(i+2<n && j-1>=0){
+        if(edges[i+2][j-1]==1){
+            if(visited[i+2][j-1]==false){
+                count = count + dfs(edges,i+2,j-1,visited,n,m);
+            }
+        }
+    }
+    if(i+2<n && j+1<m){
+        if(edges[i+2][j+1]==1){
+            if(visited[i+2][j+1]==false){
+                count = count + dfs(edges,i+2,j+1,visited,n,m);
+            }
+        }
+    }
+    return count+1;
+}
+
+vector<int> getComponents(int** edges,int n,int m){
+    bool** visited = new bool*[n];
+    for(int i=0;i<n;i++){
+        visited[i] = new bool[m];
+        for(int j=0;j<m;j++) visited[i][j] = false;
+    }
+    vector<int> output;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(edges[i][j]==1 && visited[i][j]==false){
+                int count = dfs(edges,i,j,visited,n,m);
+                output.push_back(count);
+            }
+        }
+    }
+    delete[] visited;
+    return output;
+}
+
+int main()
+{
+    pre_calc();
+    int t;
+    cin>>t;
+    while(t--){
+        int n,m,q;
+        cin>>n>>m>>q;
+        int** edges = new int*[n];
+        for(int i=0;i<n;i++){
+            edges[i] = new int[m];
+            for(int j=0;j<m;j++)
+                edges[i][j] = 0;
+        }
+        for(int i=0;i<q;i++){
+            int x,y;
+            cin>>x>>y;
+            edges[x-1][y-1]=1;
+        }
+        vector<int> ans = getComponents(edges,n,m);
+        long long s=1;
+        for(int i=0;i<ans.size();i++){
+            int p = (fact[ans[i]])%mod;
+            s = (s*p)%mod;
+        }
+        cout<<s%mod<<endl;
+    }
+	return 0;
+}
