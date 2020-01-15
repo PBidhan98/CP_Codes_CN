@@ -1,0 +1,24 @@
+#include<bits/stdc++.h>
+using namespace std;
+bool compare(const pair<int,string> &a,const pair<int,string> &b) { 
+       return (a.first <= b.first); 
+} 
+int main()
+{
+    int n;
+    cin>>n;
+    string s;
+    vector<pair<int,string>> p;
+    int m1,m2,m3;
+    for(int i=0;i<n;i++){
+        cin>>s>>m1>>m2>>m3;
+        p.push_back(make_pair(m1+m2+m3,s));
+    }
+    stable_sort(p.begin(),p.end(),compare);
+    int j=1;
+    for(int i=n-1;i>=0;i--){
+        cout<<j<<" "<<p[i].second<<endl;
+        j++;
+    }
+	return 0;
+}
