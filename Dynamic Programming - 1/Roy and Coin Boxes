@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    int n,m;
+    cin>>n>>m;
+    int* s = new int[n+1];
+    int* e = new int[n+1];
+    for(int i=0;i<=n;i++){
+        s[i] = 0;
+        e[i] = 0;
+    }
+    while(m--){
+        int l,r;
+        cin>>l>>r;
+        s[l]++;
+        e[r]++;
+    }
+    int* A = new int[n+1];
+    A[0] = 0;
+    A[1] = s[1];
+    for(int i=2;i<=n;i++)
+        A[i] = s[i] - e[i-1] + A[i-1];
+    int* exact = new int[n+1];
+    exact[0] = 0;
+    for(int i=1;i<=n;i++)
+        exact[A[i]]++;
+    int* atleast = new int[n+1];
+    atleast[0] = n;
+    atleast[n] = exact[n];
+    for(int i=n-1;i>0;i--)
+        atleast[i] = atleast[i+1] + exact[i];
+    int q;
+    cin>>q;
+    while(q--){
+        int x;
+        cin>>x;
+        cout<<atleast[x]<<endl; 
+    }
+    return 0;
+}
