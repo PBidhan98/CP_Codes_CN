@@ -1,0 +1,17 @@
+#include<bits/stdc++.h>
+char* uniqueChar(char *str){
+    map<char,int> m;
+    char* s = new char[1000000];
+    int j=0;
+    for(int i=0;i<strlen(str);i++){
+        auto it = m.find(str[i]);
+        if(it!=m.end()){
+            m[str[i]]++;
+        }else{
+            s[j]=str[i];
+            m.insert(make_pair(str[i],1));
+            j++;
+        }
+    }
+    return s;
+}
