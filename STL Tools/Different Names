@@ -1,0 +1,29 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+    string s;
+    getline(cin,s);
+    map<string,int> m;
+    int j=0;
+    string word="";
+    for(auto x: s){
+        if(x!=' '){
+            word=word+x;
+        }else{
+            m[word]++;
+            word="";
+        }
+    }
+    m[word]++;
+    map<string,int>::iterator it;
+    for(it=m.begin();it!=m.end();++it){
+        if(it->second>1){
+            cout<<it->first<<" "<<it->second<<endl;
+            j++;
+       }
+    }
+    if(j==0) cout<<"-1";
+
+	return 0;
+}
