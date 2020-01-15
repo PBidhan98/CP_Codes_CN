@@ -1,0 +1,59 @@
+//Efficient Approach using Sieve
+
+#include<iostream>
+#include<math.h>
+using namespace std;
+
+int makeSieve(int n){
+    bool s[n+1];
+    for(int i=0;i<=n;i++) s[i] = true;
+    s[0] = false;
+    s[1] = false;
+    for(int i=2;i*i<=n;i++){
+        if(s[i]==true){
+            for(int j=i*i;j<=n;j=j+i) s[j] = false; 
+        }
+    }
+    int c=0;
+    for(int i=0;i<=n;i++) {
+        if(s[i]==true) c++;
+    }
+    return c;
+}
+
+int main(){
+	int n;
+    cin>>n;
+    int count=makeSieve(n);
+    cout<<count<<endl;
+	return 0;
+}
+
+//Another Approach
+
+#include<iostream>
+#include<math.h>
+using namespace std;
+
+bool checkPrime(int n){
+    int count=0;
+    for(int j=1;(j*j)<=n;j++){
+        if((n%j) == 0){
+            if((j*j)==n) count++;
+            else count=count+2;
+        }
+    }
+    if(count==2) return true;
+    else return false;
+}
+
+int main(){
+	int n;
+    cin>>n;
+    int count=0;
+    for(int i=1;i<=n;i++){
+        if(checkPrime(i)) count++;
+    }
+    cout<<count<<endl;
+	return 0;
+}
