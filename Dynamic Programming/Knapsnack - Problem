@@ -1,0 +1,39 @@
+
+
+// recursive Approach
+
+// using namespace std;
+// int k(int* wt,int* v,int n,int W,int** dp){
+//     if(n==0 || W==0)  return 0;
+//     if(dp[n][W]!=-1) return dp[n][W];
+//     int a1=0,a2=0;
+//     if(wt[n-1]<=W) a1 = v[n-1] + k(wt,v,n-1,W-wt[n-1],dp);
+//     a2 = k(wt,v,n-1,W,dp);
+//     dp[n][W] = max(a1,a2);
+//     return max(a1,a2);
+// }
+
+//Iterative
+
+using namespace std;
+int knapsack(int* wt, int* v, int n, int W){
+    int** dp = new int*[2];
+    for(int i=0;i<=1;i++)
+        dp[i] = new int[W+1];
+    for(int i=0;i<=W;i++) dp[0][i] = 0;
+    dp[1][0] = 0;
+    int f = 1;
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=W;j++){
+            if(wt[i-1]<=j) 
+                dp[f][j] = max(dp[f^1][j] , v[i-1] + dp[f^1][j-wt[i-1]]);
+            else dp[f][j] = dp[f^1][j];
+        }
+        f=f^1;
+    }
+    int ans = dp[f^1][W];
+    for(int i=0;i<=1;i++)
+        delete[] dp[i];
+    delete[] dp;
+    return ans;
+}
