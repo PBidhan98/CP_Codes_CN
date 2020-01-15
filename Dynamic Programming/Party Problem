@@ -1,0 +1,48 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    while(1){
+        int b,n;
+        cin>>b>>n;
+        if(b==0 && n==0) break;
+        int* fees = new int[n];
+        int* fun = new int[n];
+        for(int i=0;i<n;i++){
+            int f1,f2;
+            cin>>f1>>f2;
+            fees[i] = f1;
+            fun[i] = f2;
+        }
+        int** dp = new int*[n+1];
+        for(int i=0;i<=n;i++)
+            dp[i] = new int[b+1];
+        for(int i=0;i<=n;i++) dp[i][0] = 0;
+        for(int i=0;i<=b;i++) dp[0][i] = 0;
+        int sum=b;
+        for(int i=1;i<=n;i++){
+            for(int j=1;j<=b;j++){
+                int a1=0,a2=0;
+                if(fees[i-1]<=j) {
+                    a1 = fun[i-1] + dp[i-1][j-fees[i-1]];
+                    //sum = fees[i];
+                }
+                a2 = dp[i-1][j];
+                dp[i][j] = max(a1,a2);
+            }
+        }
+        for(int i=0;i<b;i++){
+            if(dp[n][i]==dp[n][b]) {
+                sum = i;
+                break;
+            }
+        }
+        int ans = dp[n][b];
+        for(int i=0;i<=n;i++)
+            delete[] dp[i];
+        delete[] dp;
+        cout<<sum<<" "<<ans<<endl;
+    }
+    return 0;
+}
