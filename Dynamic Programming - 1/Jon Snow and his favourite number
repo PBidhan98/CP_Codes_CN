@@ -1,0 +1,78 @@
+#include<iostream>
+using namespace std;
+
+int main()
+{  
+    int n;cin>>n;
+    int k;cin>>k;
+    int x;cin>>x;
+
+    int * freq = new int[1025];//number only range from 0 to 1000
+    for(int i=0;i<=1024;i++)
+    {
+        freq[i]=0;
+    }
+    for(int i=0;i<n;i++)
+    {
+        int a;cin>>a;
+        freq[a]++;
+    }
+    int * freq_temp = new int[1024];
+ 
+    while(k--)
+    {
+           for(int i=0;i<1024;i++)
+        {
+            freq_temp[i] = 0;
+        }
+
+        int count_inserted=0;
+        for(int i=0;i<=1024;i++)
+        {
+            if(freq[i] == 0)
+                continue;
+
+            int y,p; // TWO IMPORTANT FACTORS y = number of elements that will be xored
+                    // p = x ^ i  NOTE: i is the number and freq[i] is it's count
+            if(freq[i] %2 ==0)
+                y = freq[i]/2;
+            else
+            {
+                if(count_inserted %2 == 0)
+                {
+                    y = freq[i]/2 + 1;
+                }
+                else // count_insert is odd
+                {
+                    y = freq[i]/2;
+                }
+            }
+            //y is obtained now the number p
+            p = x^i;
+            //p is obtained
+            freq_temp[p] +=y;   freq_temp[i] +=freq[i]-y;
+            count_inserted +=freq[i]; //these many element added to freq_temp
+        }
+        for(int k=0;k<1024;k++)
+            {
+                freq[k] = freq_temp[k];
+            }
+    }
+    int high,low;
+    for(int i=0;i<1024;i++)
+    {
+        if(freq[i] != 0)
+        {
+            low = i; break;
+        }
+    }
+    for(int i=1023;i>=0;i--)
+    {
+        if(freq[i] != 0)
+        {
+            high = i; break;
+        }
+    }
+    cout<<high<<" "<<low;
+    return 0;
+}
