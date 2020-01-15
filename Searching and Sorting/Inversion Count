@@ -1,0 +1,50 @@
+long long merge(int* A,int l,int m,int r){
+    int i,j,k,n1,n2;
+    n1=m-l+1;
+    n2=r-m;
+    int L[n1],R[n2];
+    for(i = 0; i<n1; i++)
+      L[i] = A[l+i];
+    for(j = 0; j<n2; j++)
+      R[j] = A[m+1+j];
+    long long count=0;
+    i = 0; j = 0; k = l;
+    while (i < n1 && j < n2) { 
+        if (L[i] > R[j]) { 
+            count = count + (n1-i);
+            A[k] = R[j]; 
+            j++;
+        }else{
+            A[k] = L[i]; 
+            i++;
+        }
+        k++; 
+    } 
+    while (i < n1) { 
+        A[k] = L[i]; 
+        i++; 
+        k++; 
+    } 
+    while (j < n2) { 
+        A[k] = R[j]; 
+        j++; 
+        k++; 
+    } 
+    return count;
+}
+
+long long mergeSort(int A[], int l, int r) { 
+    long long a=0;
+    if(l < r) { 
+        int m = l+(r-l)/2; 
+        a = mergeSort(A, l, m); 
+        a = a + mergeSort(A, m+1, r); 
+        a = a + merge(A, l, m, r); 
+    } 
+   return a;
+} 
+
+
+long long solve(int A[], int n){
+    return mergeSort(A,0,n-1);
+}
