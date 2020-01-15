@@ -1,0 +1,50 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    int m,n;
+    cin>>m>>n;
+    int** a = new int*[m];
+    int** dp = new int*[m];
+    for(int i=0;i<m;i++){
+        a[i] = new int[n];
+        dp[i] = new int[n];
+        for(int j=0;j<n;j++){
+            cin>>a[i][j];
+            dp[i][j]=0;
+        }
+    }
+    for(int j=0;j<n;j++) dp[0][j] = 0;
+    for(int i=1;i<m;i++){
+        for(int j=0;j<n;j++){
+            if(a[i][j]>=a[i-1][j]) dp[i][j] = dp[i-1][j];
+            else dp[i][j] = i;
+        }
+    }
+    int* ans  = new int[m];
+    int mini;
+    for(int i=0;i<m;i++){
+        mini = INT_MAX;
+        for(int j=0;j<n;j++)
+            if(dp[i][j]<mini) mini = dp[i][j];
+        ans[i] = mini;
+    }
+    int q;
+    cin>>q;
+    while(q--){
+        int l,r,f=0;
+        cin>>l>>r;
+        if(l==r) cout<<"Yes"<<endl;
+        else {
+        for(int i=0;i<m;i++)
+            if(ans[r-1]<=l-1) {
+                f=1;
+                break;
+            }
+        if(f==0) cout<<"No"<<endl;
+        else cout<<"Yes"<<endl;
+        }
+    }
+    return 0;
+}
