@@ -1,0 +1,41 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+bool check(long long int* p, int mid,int n,int c){
+    long long int k=0,m=1;
+    for(int j=1;j<n;j++){
+        if(p[j]-p[k]>=mid) {
+            m++;
+            k=j;
+        }
+        if(m==c) return true; 
+    }
+    return false;
+}
+
+int main() {
+    int t;
+    cin>>t;
+    while(t--){
+        int n,c;
+        cin>>n>>c;
+        long long int* p=new long long int[n];
+        for(int i=0;i<n;i++){
+            cin>>p[i];
+        }
+        sort(p,p+n);
+        long long start=0;
+        long long ans=-1;
+        long long end=p[n-1]-p[0];
+        while(start<=end){    
+            long long int mid=(start+end)/2;
+            if(check(p,mid,n,c)) {
+                ans=mid;
+                start=mid+1;
+            }
+            else end=mid-1;           
+        }
+        cout<<ans<<endl;
+    }
+    return 0;
+}
