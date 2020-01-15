@@ -1,3 +1,5 @@
+// Using O(n) space instead of O(n^2) by using alternate vectors
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -24,6 +26,39 @@ int main()
     }
     int ans = dp[flag^1][k];
     for(int i=0;i<2;i++)
+        delete[] dp[i];
+    delete[] dp;
+    if(ans==0) cout<<"No"<<endl;
+    else cout<<"Yes"<<endl;
+    return 0;
+}
+
+// Using DP 2D array
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    int n;
+    cin>>n;
+    int* w = new int[n];
+    for(int i=0;i<n;i++) cin>>w[i];
+    int k;
+    cin>>k;
+    bool** dp = new bool*[n+1];
+    for(int i=0;i<=n;i++)
+        dp[i] = new bool[k+1];
+    for(int i=0;i<=k;i++) dp[0][i] = 0;
+    for(int i=0;i<=n;i++) dp[i][0] = 1;
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=k;j++){
+            dp[i][j] = dp[i-1][j];
+            if(w[i-1]<=j) dp[i][j] = dp[i][j] || dp[i-1][j-w[i-1]];
+        }
+    }
+    int ans = dp[n][k];
+    for(int i=0;i<=n;i++)
         delete[] dp[i];
     delete[] dp;
     if(ans==0) cout<<"No"<<endl;
