@@ -1,0 +1,53 @@
+#include <bits/stdc++.h>
+int FindUnique(int arr[], int size){
+    int r=arr[0];
+    for(int i=1;i<size;i++){
+        r=r^arr[i];
+    }
+    return r;
+}
+
+//Another Approach
+
+#include <bits/stdc++.h>
+int FindUnique(int arr[], int size){
+    std::map<int,int> m;
+    for(int i=0;i<size;i++){
+        auto s=m.find(arr[i]);
+        if(s==m.end()){
+           m.insert(std::make_pair(arr[i],1));
+        }else{
+            m[arr[i]]++;
+        }
+    }
+    std::map<int,int>::iterator i;
+    for(i=m.begin();i!=m.end();i++){
+        if(i->second==1){return i->first;}
+    }
+}
+
+//Another Approach
+
+#include <bits/stdc++.h>
+int FindUnique(int arr[], int size){
+    std::map<int,int> m;
+    for(int i=0;i<size;i++){
+        m[arr[i]]++;
+    }
+    std::map<int,int>::iterator i;
+    for(i=m.begin();i!=m.end();i++){
+        if(i->second==1){return i->first;}
+    }
+}
+
+//Another Approach
+
+#include<bits/stdc++.h>
+int FindUnique(int arr[], int size){
+    std::sort(arr,arr+size);
+    if(arr[size-2]!=arr[size-1]) return arr[size-1];
+    for(int i=0;i<size-1;i++){
+        if(arr[i]==arr[i+1]) i++;
+        else return arr[i];
+    }
+}
