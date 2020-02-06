@@ -1,5 +1,6 @@
 // S and T - input strings
 // You need to check if string T is present in S or not
+
 #include <string.h>
 using namespace std;
 int* getLps(string pattern){
