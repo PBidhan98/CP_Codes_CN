@@ -1,0 +1,58 @@
+#include <iostream>
+using namespace std;
+
+struct Node{
+  int key;
+  Node* next;
+  Node* prev;
+  Node(int x){
+    key = x;
+    next = prev = NULL;
+  }
+};
+
+void insertBegin(Node** head, int x){
+  Node* t = new Node(x);
+  t->next = *head;
+  if(*head!=NULL)
+    (*head) -> prev = t;
+  *head = t;
+}
+
+void print(Node* head){
+  while(head!=NULL){
+    cout<<head->key<<" ";
+    head = head->next;
+  }
+  cout<<endl;
+}
+
+void deln(Node** head, Node* del){
+  if(*head==NULL || del==NULL) return;
+  if(*head==del) {
+    *head = del->next;
+    delete(del);
+    return;
+  }
+  if(del->next==NULL) {
+    del->prev->next = NULL;
+    delete(del);
+    return;
+  } 
+  del->next->prev = del->prev;
+  del->prev->next = del->next;
+  delete(del);
+  return;
+}
+
+int main() {
+  Node* head = NULL;
+  insertBegin(&head,10);
+  insertBegin(&head, 5);
+  insertBegin(&head, 20);
+  insertBegin(&head,60);
+  print(head);
+  deln(&head, head->next);
+  print(head);
+  return 0;
+}
