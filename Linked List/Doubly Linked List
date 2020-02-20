@@ -45,6 +45,29 @@ void deln(Node** head, Node* del){
   return;
 }
 
+void delBefore(Node** head, Node* del){
+  if(del->prev==NULL) return;
+  if(del->prev==*head) {
+    *head = (*head) -> next;
+    return;
+  }
+  Node* last = del->prev;
+  last->prev->next = del;
+  del->prev = last->prev;
+  delete(last);
+  return;
+}
+
+void insertBefore(Node** head, int x, Node* ins){
+  Node* curr = new Node(x);
+  curr -> prev = ins->prev;
+  curr -> next = ins;
+  ins->prev = curr;
+  if(curr->prev == NULL) *head = curr;
+  else curr->prev->next = curr;
+  return;
+}
+
 int main() {
   Node* head = NULL;
   insertBegin(&head,10);
@@ -52,7 +75,8 @@ int main() {
   insertBegin(&head, 20);
   insertBegin(&head,60);
   print(head);
-  deln(&head, head->next);
+  Node* ins = head;
+  insertBefore(&head,30,ins);
   print(head);
   return 0;
 }
