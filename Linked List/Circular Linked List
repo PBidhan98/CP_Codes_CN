@@ -22,6 +22,7 @@ void insertBegin(Node** tail, int x){
   (*tail)->next = curr;
 }
 
+
 void insertEnd(Node** tail, int x){
   if(*tail==NULL) {
     Node* t = new Node(x);
@@ -40,6 +41,28 @@ void insertAfter(Node** tail,int x,Node* ins){
   curr->next = ins->next;
   ins->next = curr;
   if(ins==(*tail)) *tail = curr;
+}
+
+void insertKeyAfter(Node** tail,int x,int target){
+  Node* curr = new Node(x);
+  if(target==(*tail)->key) {
+    curr->next = (*tail)->next;
+    (*tail)->next = curr;
+    *tail = curr;
+    return;
+  }
+  if(target==(*tail)->next->key){
+    curr->next = (*tail)->next->next;
+    (*tail)->next->next = curr;
+    return;
+  }
+  Node* t = (*tail)->next;
+  t = t->next;
+  while(t->key!=target && t!=(*tail)->next){
+    t = t->next;
+  }
+  curr->next = t->next;
+  t->next = curr;
 }
 
 void print(Node* tail){
@@ -61,8 +84,6 @@ int main() {
   insertBegin(&tail, 5);
   insertBegin(&tail, 20);
   insertBegin(&tail,60);
-  print(tail);
-  insertAfter(&tail,70, tail->next->next->next->next);
   print(tail);
   return 0;
 }
