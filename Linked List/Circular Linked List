@@ -1,0 +1,68 @@
+#include <iostream>
+using namespace std;
+
+struct Node{
+  int key;
+  Node* next;
+  Node(int x){
+    key = x;
+    next = NULL;
+  }
+};
+
+void insertBegin(Node** tail, int x){
+  if(*tail==NULL) {
+    Node* t = new Node(x);
+    *tail = t;
+    (*tail)->next = (*tail);
+    return;
+  }
+  Node* curr = new Node(x);
+  curr->next = (*tail)->next;
+  (*tail)->next = curr;
+}
+
+void insertEnd(Node** tail, int x){
+  if(*tail==NULL) {
+    Node* t = new Node(x);
+    *tail = t;
+    (*tail)->next = (*tail);
+    return;
+  }
+  Node* curr = new Node(x);
+  curr->next = (*tail)->next;
+  (*tail)->next = curr;
+  *tail = curr;
+}
+
+void insertAfter(Node** tail,int x,Node* ins){
+  Node* curr = new Node(x);
+  curr->next = ins->next;
+  ins->next = curr;
+  if(ins==(*tail)) *tail = curr;
+}
+
+void print(Node* tail){
+  if(tail==NULL) return;
+  Node* t = tail->next;
+  cout<<t->key<<" ";
+  t = t->next;
+  while(t!=tail->next){
+    cout<<t->key<<" ";
+    t = t->next;
+  }
+  cout<<endl;
+}
+
+
+int main() {
+  Node* tail = NULL;
+  insertBegin(&tail,10);
+  insertBegin(&tail, 5);
+  insertBegin(&tail, 20);
+  insertBegin(&tail,60);
+  print(tail);
+  insertAfter(&tail,70, tail->next->next->next->next);
+  print(tail);
+  return 0;
+}
