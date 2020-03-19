@@ -1,0 +1,29 @@
+//We can also use stack. Replace recursion with stack.
+
+#include <bits/stdc++.h>
+using namespace std;
+
+void dfs(vector<int> adj[], int n, int sv, bool* visited){
+  cout<<sv<<" ";
+  visited[sv] = true;
+  for(int j:adj[sv]){
+    if(visited[j]==false) {
+      dfs(adj,n,j,visited);
+    }
+  }
+}
+
+int main() {
+  int V, E;
+    cin >> V >> E;
+    vector<int> adj[V];
+    for(int i=0;i<E;i++){
+        int f,s;
+        cin>>f>>s;
+        adj[f].push_back(s);
+        adj[s].push_back(f);
+    }
+    bool* visited = new bool[V];
+    for(int i=0;i<V;i++) visited[i] = false;
+    dfs(adj,V, 0,visited);
+}
