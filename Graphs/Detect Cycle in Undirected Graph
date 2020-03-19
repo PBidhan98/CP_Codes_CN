@@ -1,0 +1,28 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+bool dfs(vector<int> adj[], int n, int sv, bool* visited, int parent){
+  visited[sv] = true;
+  for(int j:adj[sv]){
+    if(visited[j]==false) {
+      if(dfs(adj,n,j,visited,sv)) return true; 
+      else if(j!=parent) return true;
+    }
+  }
+  return false;
+}
+
+int main() {
+  int V, E;
+    cin >> V >> E;
+    vector<int> adj[V];
+    for(int i=0;i<E;i++){
+        int f,s;
+        cin>>f>>s;
+        adj[f].push_back(s);
+        adj[s].push_back(f);
+    }
+    bool* visited = new bool[V];
+    for(int i=0;i<V;i++) visited[i] = false;
+    dfs(adj,V, 0,visited,-1);
+}
