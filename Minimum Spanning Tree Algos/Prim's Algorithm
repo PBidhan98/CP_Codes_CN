@@ -1,0 +1,68 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int minVertex(int* weight,bool* visited,int n){
+  int minVertex = -1;
+  for(int i=0;i<n;i++){
+    if(!visited[i] && ( (minVertex==-1) || (weight[minVertex]>weight[i]))) {
+      minVertex = i;
+    }
+  }
+  return minVertex;
+}
+
+//Time : (n-1)*(n+n) = O(n^2) using adjacency matrix
+// O(E log V) using adjacency list and priority queues
+
+void prims(int** edges, int n){
+  bool* visited = new bool[n]();
+  int* parent = new int[n];
+  int* weight = new int[n];
+  for(int i=0;i<n;i++) weight[i] = INT_MAX;       //O(n)
+  parent[0] = -1;
+  weight[0] = 0;
+  for(int i=0;i<n-1;i++){                         //O(n-1)
+    //get minVertex i.e. unvisited vertex with minimum weight
+    int minV = minVertex(weight, visited, n);     //O(n) can reduce using priority queues, O(log n)
+    visited[minV] = true;
+    //explore all the neighbours of minimum vertex and update parent and weight array accordingly
+    for(int j=0;j<n;j++){                         //O(n) can be reduced if we use adjacency list and perform some operations here as well if using priority queues.
+      if(edges[minV][j]!=0 && !visited[j])  {
+        if(weight[j]>edges[minV][j]){
+          weight[j]=edges[minV][j];
+          parent[j]=minV;
+        }
+      } 
+    }
+  }
+  for(int i=1;i<n;i++){
+    if(parent[i]>i){
+      cout<<i<<" "<<parent[i]<<" "<<weight[i]<<endl; 
+    } else{
+      cout<<parent[i]<<" "<<i<<" "<<weight[i]<<endl;
+    }
+  }
+  delete [] parent;
+  delete [] visited;
+  delete [] weight;
+}
+
+int main()
+{
+    int n, E;
+    cin>>n>>E;
+    int** edges = new int*[n];
+    for(int i=0;i<n;i++){
+        edges[i] = new int[n];
+        for(int j=0;j<n;j++)
+            edges[i][j] = 0;
+    }
+    for(int i=0;i<E;i++){
+        int f,s,w;
+        cin>>f>>s>>w;
+        edges[f][s] = w;
+        edges[s][f] = w;
+    }
+    prims(edges, n);
+    return 0;
+}
